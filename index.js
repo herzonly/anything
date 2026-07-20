@@ -2,8 +2,8 @@ const express = require('express');
 const fetch = (...args) => import('node-fetch').then(({ default: f }) => f(...args));
 
 const app = express();
-const PORT = 3000;
-const BROWSER_ID = '62d64ff4-3571-4f89-b2de-4bcbb3094f33';
+const PORT = process.env.PORT || 3000;
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
 const SYSTEM_PROMPT = `You are an AI that generates complete, beautiful, professional HTML pages based on the URL path the user visits.
 
@@ -64,39 +64,31 @@ const SYSTEM_PROMPT = `You are an AI that generates complete, beautiful, profess
 - No placeholder image URLs (no picsum, no via.placeholder, etc.) — use CSS background gradients instead if a visual block is needed.`;
 
 async function generatePage(path) {
-  const res = await fetch('https://chateverywhere.app/api/chat', {
+  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'user-browser-id': BROWSER_ID,
-      'user-selected-plugin-id': '',
-      'Output-Language': ''
+      'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+      'HTTP-Referer': 'https://herza.vercel.app',
+      'X-Title': 'Herza AI Pages'
     },
     body: JSON.stringify({
-      model: {
-        id: 'gpt-3.5-turbo',
-        name: 'GPT-3.5',
-        maxLength: 12000,
-        tokenLimit: 4000,
-        completionTokenLimit: 2500,
-        deploymentName: 'gpt-35'
-      },
-      messages: [
-        {
-          pluginId: null,
-          role: 'user',
-          content: `Generate a full HTML page for the URL path: ${path}`
-        }
-      ],
-      prompt: SYSTEM_PROMPT,
+      model: 'openai/gpt-3.5-turbo',
       temperature: 0.7,
-      enableConversationPrompt: false
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: `Generate a full HTML page for the URL path: ${path}` }
+      ]
     })
   });
 
-  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`API error: ${res.status} - ${err}`);
+  }
 
-  const text = await res.text();
+  const data = await res.json();
+  const text = data.choices[0].message.content;
   const html = text.replace(/^```html\n?/, '').replace(/\n?```$/, '').trim();
   return html;
 }
