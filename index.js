@@ -1,9 +1,9 @@
 const express = require('express');
 const fetch = (...args) => import('node-fetch').then(({ default: f }) => f(...args));
-const { randomUUID } = require('crypto');
 
 const app = express();
 const PORT = 3000;
+const BROWSER_ID = '62d64ff4-3571-4f89-b2de-4bcbb3094f33';
 
 const SYSTEM_PROMPT = `You are an AI that generates complete, beautiful, professional HTML pages based on the URL path the user visits.
 
@@ -64,18 +64,13 @@ const SYSTEM_PROMPT = `You are an AI that generates complete, beautiful, profess
 - No placeholder image URLs (no picsum, no via.placeholder, etc.) — use CSS background gradients instead if a visual block is needed.`;
 
 async function generatePage(path) {
-  const browserId = randomUUID();
-
   const res = await fetch('https://chateverywhere.app/api/chat', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Output-Language': '',
-      'user-browser-id': browserId,
+      'user-browser-id': BROWSER_ID,
       'user-selected-plugin-id': '',
-      'Referer': 'https://chateverywhere.app/',
-      'Origin': 'https://chateverywhere.app',
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'
+      'Output-Language': ''
     },
     body: JSON.stringify({
       model: {
