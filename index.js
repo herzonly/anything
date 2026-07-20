@@ -72,7 +72,10 @@ async function generatePage(path) {
       'Content-Type': 'application/json',
       'Output-Language': '',
       'user-browser-id': browserId,
-      'user-selected-plugin-id': ''
+      'user-selected-plugin-id': '',
+      'Referer': 'https://chateverywhere.app/',
+      'Origin': 'https://chateverywhere.app',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'
     },
     body: JSON.stringify({
       model: {
