@@ -13,8 +13,6 @@
   "license": "MIT",
   "dependencies": {
     "express": "^5.2.1",
-    "node-fetch": "^3.3.2",
-    "uuid": "^14.0.1"
+    "node-fetch": "^3.3.2"
   }
 }
-
