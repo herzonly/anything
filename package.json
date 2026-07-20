@@ -1,0 +1,20 @@
+{
+  "name": "ai-path-server",
+  "version": "1.0.0",
+  "description": "AI-generated pages based on URL path using ChatEverywhere API",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "keywords": ["ai", "express", "generative", "html"],
+  "author": "Herza",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.2.1",
+    "node-fetch": "^3.3.2",
+    "uuid": "^14.0.1"
+  }
+}
+
