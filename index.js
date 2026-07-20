@@ -1,6 +1,6 @@
 const express = require('express');
 const fetch = (...args) => import('node-fetch').then(({ default: f }) => f(...args));
-const { v4: uuidv4 } = require('uuid');
+const { randomUUID } = require('crypto');
 
 const app = express();
 const PORT = 3000;
@@ -64,7 +64,7 @@ const SYSTEM_PROMPT = `You are an AI that generates complete, beautiful, profess
 - No placeholder image URLs (no picsum, no via.placeholder, etc.) — use CSS background gradients instead if a visual block is needed.`;
 
 async function generatePage(path) {
-  const browserId = uuidv4();
+  const browserId = randomUUID();
 
   const res = await fetch('https://chateverywhere.app/api/chat', {
     method: 'POST',
