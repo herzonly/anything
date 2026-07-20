@@ -103,8 +103,8 @@ async function generatePage(path) {
   return html;
 }
 
-app.get('*', async (req, res) => {
-  const path = req.path;
+app.get('/*path', async (req, res) => {
+  const path = '/' + (req.params.path || '');
   console.log(`[${new Date().toISOString()}] GET ${path}`);
 
   try {
